@@ -1,0 +1,144 @@
+/* Final polish pass: only the process-card typography/decor and the UK globe handoff. */
+
+/* Keep process titles on word boundaries and reserve space for the supplied SVG detail. */
+.process-card {
+  padding: 38px 96px 36px 40px;
+  overflow: hidden;
+}
+.process-card h2,
+html[lang="ru"] .process-card h2 {
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: balance;
+  font-size: clamp(32px, 2.55vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -.04em;
+}
+.process-card-decor {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: 28px;
+  width: 50px;
+  height: 274px;
+  max-height: calc(100% - 58px);
+  transform: translateY(-50%);
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+.process-card .step-label,
+.process-card h2,
+.process-card > p:not(.step-label) {
+  position: relative;
+  z-index: 3;
+}
+
+/* Transparent globe asset: no rectangular black plate around the image. */
+.uk-globe-visual,
+.uk-globe-base,
+.handoff-globe-uk-base {
+  background: transparent !important;
+}
+.uk-globe-base {
+  display: block;
+  filter: none !important;
+}
+
+/* London is at the top of the UK / south-east England in this Europe-facing projection. */
+.uk-globe-target .uk-location-pin,
+.globe-handoff .handoff-location-pin {
+  left: 43.1% !important;
+  top: 25.2% !important;
+  width: 9.4% !important;
+  transform: translate(-50%, -100%);
+}
+
+/* Supplied vertical SVG accents on both sides of the UK globe image. */
+.uk-globe-accent {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  width: 30px;
+  height: min(58%, 274px);
+  object-fit: contain;
+  opacity: .44;
+  pointer-events: none;
+  filter: invert(82%) sepia(93%) saturate(1067%) hue-rotate(2deg) brightness(105%) contrast(103%);
+}
+.uk-globe-accent-left {
+  left: -10px;
+  transform: translateY(-50%);
+}
+.uk-globe-accent-right {
+  right: -10px;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+/* Faster, seamless visual settlement after the travelling globe reaches the UK block. */
+.globe-handoff {
+  will-change: left, top, width, height, opacity, transform;
+  contain: layout paint style;
+}
+.uk-globe-target {
+  transition: opacity .28s ease, transform .42s cubic-bezier(.2,.82,.22,1) !important;
+}
+
+@media (max-width: 1240px) {
+  .process-card {
+    padding: 30px 76px 30px 30px;
+  }
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    font-size: clamp(28px, 3.25vw, 38px);
+  }
+  .process-card-decor {
+    right: 20px;
+    width: 40px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .process-card {
+    padding: 26px 70px 26px 28px;
+  }
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    font-size: clamp(26px, 4vw, 34px);
+    line-height: 1.1;
+  }
+  .process-card-decor {
+    right: 18px;
+    width: 36px;
+    height: 196px;
+  }
+  .uk-globe-accent { width: 24px; opacity: .36; }
+}
+
+@media (max-width: 640px) {
+  .process-card {
+    padding: 22px 58px 22px 22px;
+  }
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    font-size: clamp(23px, 6.8vw, 30px);
+    line-height: 1.1;
+    text-wrap: pretty;
+  }
+  .process-card-decor {
+    right: 14px;
+    width: 30px;
+    height: 160px;
+    max-height: calc(100% - 42px);
+  }
+  .uk-globe-accent {
+    width: 20px;
+    height: 48%;
+    opacity: .3;
+  }
+  .uk-globe-accent-left { left: -4px; }
+  .uk-globe-accent-right { right: -4px; }
+}

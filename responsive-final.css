@@ -1,0 +1,157 @@
+/* Final responsive and alignment pass — loaded last on purpose. */
+
+/* Keep the fixed navigation visually centred independently of the side controls. */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1480px, calc(100vw - 40px));
+  min-height: 72px;
+  padding: 0;
+}
+.site-header .brand {
+  flex: 0 0 220px;
+  justify-self: auto;
+  justify-content: flex-start;
+}
+.site-header .desktop-nav {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(800px, 54vw);
+  transform: translate(-50%, -50%);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+}
+.site-header .desktop-nav a {
+  min-width: 0;
+  padding-inline: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.site-header .header-actions {
+  flex: 0 0 220px;
+  justify-content: flex-end;
+}
+
+/* The requested translated gradient title appears before and behind the first globe. */
+.process-display-title {
+  position: absolute;
+  z-index: 1;
+  top: clamp(34px, 6vh, 72px);
+  left: 50%;
+  width: min(92vw, 1480px);
+  margin: 0;
+  transform: translateX(-50%);
+  color: transparent;
+  background: linear-gradient(180deg, #3b3d3e 0%, #202122 42%, #0e0e0e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  font-size: clamp(72px, 8.2vw, 132px);
+  font-weight: 600;
+  line-height: .92;
+  letter-spacing: -.065em;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: .9;
+}
+/* The old letter-by-letter background remains in the DOM for JS compatibility only. */
+.process-background-title { display: none !important; }
+
+/* Prevent long Russian stage names from leaving their card. */
+.process-card {
+  overflow: hidden;
+}
+.process-card h2 {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+html[lang="ru"] .process-card h2 {
+  font-size: clamp(31px, 2.7vw, 48px);
+  line-height: 1.06;
+  letter-spacing: -.045em;
+}
+
+/* Accurate London marker: the pin tip is positioned over south-east England. */
+.uk-globe-target .uk-location-pin,
+.globe-handoff .handoff-location-pin {
+  left: 41.1%;
+  top: 29.5%;
+  width: 8.2%;
+}
+
+
+
+/* Tablet layout: preserve the card/globe relationship without collisions. */
+@media (max-width: 900px) {
+  .process { height: 610vh; }
+  .process-display-title {
+    top: 86px;
+    width: calc(100vw - 36px);
+    font-size: clamp(48px, 10.2vw, 78px);
+    white-space: normal;
+  }
+  .globe-stage {
+    left: 69%;
+    top: 42%;
+    width: min(68vw, 610px);
+  }
+  .process-card { padding: 28px; }
+  .process-card h2 { font-size: clamp(27px, 4.5vw, 38px); }
+  html[lang="ru"] .process-card h2 { font-size: clamp(24px, 4vw, 34px); }
+  .process-card > p:not(.step-label) { font-size: 14px; line-height: 1.45; }
+  .process-counter { right: 22px; top: 39%; }
+}
+
+/* Phone layout: no horizontal overflow, readable Russian copy, and a centred globe. */
+@media (max-width: 640px) {
+  :root { --container: calc(100vw - 30px); }
+  .site-header {
+    top: 8px;
+    width: calc(100vw - 16px);
+    min-height: 58px;
+  }
+  .site-header .brand,
+  .site-header .brand img { width: 48px; }
+  .site-header .header-actions { gap: 8px; }
+  .language-current { width: 62px; height: 44px; }
+  .language-menu { width: 62px; top: calc(100% + 4px); padding: 4px; }
+  .menu-toggle { width: 44px; height: 44px; }
+  .process {
+    height: 600vh;
+  }
+  .process-sticky {
+    min-height: 100svh;
+  }
+  .process-display-title {
+    z-index: 1;
+    top: 86px;
+    width: calc(100vw - 24px);
+    font-size: clamp(40px, 12.4vw, 60px);
+    line-height: .98;
+    letter-spacing: -.055em;
+    white-space: normal;
+  }
+  html[lang="ru"] h2:not(.process-display-title) {
+    font-size: 24px;
+    line-height: 1.06;
+  }
+  html[lang="ru"] h1 {
+    font-size: 32px;
+  }
+  .orbit-ring { border-width: 1.2px; }
+  
+}
+@media (max-width: 380px) {
+.process-display-title {
+    top: 68px;
+    font-size: clamp(48px, 9vw, 96px);
+}
+.globe-stage { top: 32%; width: 78vw; }
+.process-cards { height: 285px; }
+}

@@ -1,0 +1,392 @@
+/* Reviewed final corrections: Figma alignment, reversible scroll effects and layered animation. */
+:root {
+  --font-display: "Unbounded", Arial, sans-serif;
+  --font-body: "Manrope", Arial, sans-serif;
+  --yellow: #ffd100;
+  --panel-dark: #151515;
+}
+
+body, button, input, textarea { font-family: var(--font-body); }
+h1, h2, h3, .manifesto-text, .section-title, .process-background-title,
+.process-card h3, .accordion-trigger, .footer-brand-block h2 { font-family: var(--font-display); }
+
+/* 1, 3, 4, 5 — fixed and exactly centred header with equal side columns. */
+.site-header {
+  position: fixed;
+  grid-template-columns: 180px minmax(560px, 760px) 180px;
+  column-gap: 24px;
+  align-items: center;
+}
+.brand {
+  width: 180px;
+  height: 64px;
+  justify-self: start;
+  justify-content: flex-start;
+}
+.brand img {
+  display: block;
+  width: 64px;
+  height: auto;
+  image-rendering: auto;
+}
+.desktop-nav {
+  justify-self: center;
+  width: 100%;
+  gap: 4px;
+  padding: 4px;
+}
+.desktop-nav a { min-height: 50px; padding-inline: 14px; }
+.header-actions {
+  width: 180px;
+  justify-self: end;
+  justify-content: flex-end;
+}
+.language-menu {
+  top: calc(100% + 4px);
+  padding: 4px;
+  display: grid;
+  gap: 4px;
+}
+.language-option { min-height: 36px; }
+
+/* 2 — the four squares are driven by JS: 600 ms pulse + 400 ms pause. */
+.ambient-square,
+body.is-ready .ambient-square {
+  opacity: 0;
+  transform: none;
+  transition: none !important;
+  will-change: opacity;
+}
+
+/* Hero bottom row: fixed 36 px rhythm, company name in white/bold. */
+.hero-bottom {
+  display: flex;
+  align-items: flex-start;
+  gap: 36px;
+}
+.hero-points {
+  flex: 0 0 min(31%, 360px);
+  gap: 14px;
+}
+.hero-copy {
+  flex: 1 1 auto;
+  max-width: none;
+  margin: 0;
+  font-size: clamp(16px, 1.25vw, 20px);
+  line-height: 1.5;
+}
+.hero-company-name {
+  color: #fff;
+  font-weight: 700;
+}
+.hero-copy > span { color: #aaa9a5; font-weight: 400; }
+
+/* 7 — smaller full-width vision copy; JS makes it reversible in both directions. */
+.manifesto { min-height: 112svh; padding: 110px 0; }
+.manifesto-inner { width: min(1500px, calc(100vw - 72px)); max-width: none; }
+.manifesto-text {
+  width: 100%;
+  max-width: none;
+  font-size: clamp(34px, 4vw, 62px);
+  line-height: 1.12;
+  letter-spacing: -.045em;
+}
+.manifesto-text span {
+  color: #2e2e2c;
+  opacity: .14;
+  transform: translateY(24px);
+  filter: blur(5px);
+  transition: none !important;
+  will-change: opacity, transform, filter, color;
+}
+.manifesto-text span[data-tone="yellow"] { --final-color: #ffd100; }
+.manifesto-text span[data-tone="white"] { --final-color: #f6f6f3; }
+
+/* Mission image: background → moving line → transparent processor foreground. */
+.story-copy h2 { margin-top: 0; }
+.story-media-processor {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 1122 / 900;
+  min-height: 0;
+  background: #101010;
+}
+.story-media-processor .processor-background,
+.story-media-processor .processor-foreground,
+.story-media-processor .trace-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.story-media-processor .processor-background {
+  z-index: 1;
+  min-height: 0;
+  object-fit: cover;
+  transform: none !important;
+}
+.story-media-processor .trace-lines {
+  z-index: 2;
+  pointer-events: none;
+  overflow: visible;
+}
+.story-media-processor .processor-foreground {
+  z-index: 3;
+  min-height: 0;
+  object-fit: cover;
+  transform: none !important;
+  pointer-events: none;
+}
+.trace-path {
+  fill: none;
+  stroke: #ffd100;
+  stroke-width: 2;
+  stroke-dasharray: 12 18;
+  opacity: .92;
+  animation: traceDash 2.8s linear infinite;
+}
+.trace-dot {
+  fill: #fff6b0;
+  filter: drop-shadow(0 0 10px #ffd100) drop-shadow(0 0 20px rgba(255,209,0,.65));
+  offset-path: path("M52 862 C160 770 176 642 292 536 C390 447 462 422 518 337 C612 198 756 238 842 130 C930 22 1010 105 1090 42");
+  offset-distance: 0%;
+  animation: traceMoveReviewed 5.2s linear infinite;
+}
+@keyframes traceDash { to { stroke-dashoffset: -60; } }
+@keyframes traceMoveReviewed { to { offset-distance: 100%; } }
+
+/* Accordion: text never changes colour; only the row background darkens. */
+.accordion { border-top-color: rgba(255,255,255,.16); }
+.accordion-item {
+  padding-inline: 36px;
+  background: transparent;
+  transition: background-color .28s ease;
+}
+.accordion-item:hover,
+.accordion-item.is-open { background: #151515; }
+.accordion-trigger,
+.accordion-trigger:hover,
+.accordion-item.is-open .accordion-trigger {
+  padding-inline: 0;
+  color: #f5f5f2;
+}
+.accordion-panel > ul {
+  padding-left: 36px;
+  padding-right: 0;
+}
+.accordion-item.is-open .accordion-panel > ul { padding-bottom: 36px; }
+.accordion-panel li::before { left: -22px; }
+
+/* Why Work With Us — exact 3 x 2 composition from the supplied reference. */
+.advantages { padding-top: clamp(96px, 10vw, 150px); }
+.advantage-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(260px, auto));
+  gap: 36px;
+  align-items: stretch;
+  perspective: 1100px;
+}
+.advantage-intro {
+  position: static;
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 16px 8px 8px 0;
+}
+.advantage-intro h2 {
+  margin: 0 0 34px;
+}
+.advantage-intro h2 strong { display: inline; color: var(--yellow); }
+.advantage-grid { display: contents; }
+.tilt-card {
+  min-height: 270px;
+  display: grid;
+  grid-template-columns: 72px minmax(0,1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
+  column-gap: 20px;
+  row-gap: 28px;
+  padding: 30px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,209,0,.07), transparent 34%),
+    linear-gradient(145deg, #1c1c1c, #151515 78%);
+}
+.tilt-card:nth-child(1) { grid-column: 2; grid-row: 1; }
+.tilt-card:nth-child(2) { grid-column: 3; grid-row: 1; }
+.tilt-card:nth-child(3) { grid-column: 1; grid-row: 2; }
+.tilt-card:nth-child(4) { grid-column: 2; grid-row: 2; }
+.tilt-card:nth-child(5) { grid-column: 3; grid-row: 2; }
+.card-icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  transform:  none;
+}
+.card-icon::before,
+.card-icon::after { display: none !important; }
+.card-icon img { width: 64px; height: 64px; object-fit: contain; }
+.tilt-card h3 {
+  align-self: center;
+  margin: 0;
+  font-size: clamp(20px, 1.55vw, 25px);
+  line-height: 1.25;
+  font-weight: 600;
+}
+.tilt-card p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #a9a9a5;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* How We Work: no button, no progress line, and true front/back orbit layering. */
+.process-progress { display: none !important; }
+.process-card > p:not(.step-label) { margin-bottom: 0; }
+.globe-stage { isolation: isolate; }
+#globe-canvas { z-index: 3; }
+.globe-sheen { z-index: 4; }
+.orbit-ring { backface-visibility: visible; }
+.orbit-back { z-index: 2; }
+.orbit-front {
+  z-index: 5;
+  clip-path: inset(50% 0 0 0);
+  filter: drop-shadow(0 0 9px rgba(255,209,0,.35));
+}
+.orbit-front::after { box-shadow: 0 0 20px rgba(255,209,0,.95); }
+
+/* UK block: Europe-facing globe and a separate London SVG pin. */
+.uk-section {
+  min-height: 720px;
+  padding: 108px 0 96px;
+}
+.uk-layout {
+  grid-template-columns: minmax(320px, 410px) minmax(0, 500px);
+  gap: clamp(72px, 9vw, 140px);
+  align-items: center;
+}
+.uk-globe-target,
+.uk-globe-target.reveal-card,
+.uk-globe-target.reveal-card.is-visible,
+.uk-globe-target.is-handoff-complete {
+  width: min(410px, 38vw);
+  opacity: 1;
+  transform: none;
+}
+.uk-globe-visual { position: relative; width: 100%; aspect-ratio: 1; }
+.uk-globe-base { width: 100%; height: 100%; object-fit: contain; }
+.uk-globe-target .uk-location-pin {
+  position: absolute;
+  z-index: 3;
+  left: 44%;
+  top: 17.4%;
+  width: 11%;
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+  transform: translate(-50%, -100%);
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 13px rgba(255,209,0,.72));
+  animation: londonPinPulse 1.8s ease-in-out infinite;
+}
+@keyframes londonPinPulse {
+  50% { transform: translate(-50%, -100%) scale(1.08); }
+}
+.uk-copy { max-width: 610px; }
+.uk-copy h2 { margin-bottom: 24px; }
+.uk-copy p:not(.eyebrow) { max-width: 610px; font-size: 16px; line-height: 1.55; }
+.uk-descent-trail { opacity: 0 !important; }
+
+/* Handoff uses the same Europe-facing base and the same London coordinate. */
+.handoff-uk-layer {
+  position: absolute;
+  inset: 0;
+  opacity: var(--uk-morph, 0);
+}
+.handoff-globe-process { opacity: calc(1 - var(--uk-morph, 0)); }
+.handoff-globe-uk-base { opacity: 1; }
+.globe-handoff .handoff-location-pin {
+  position: absolute;
+  z-index: 3;
+  left: 44%;
+  top: 17.4%;
+  width: 11%;
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+  transform: translate(-50%, -100%);
+  filter: drop-shadow(0 0 12px rgba(255,209,0,.72));
+}
+
+@media (max-width: 1200px) {
+  .site-header { grid-template-columns: 1fr auto; }
+  .brand { width: auto; }
+  .header-actions { width: auto; }
+  .advantage-layout { grid-template-columns: repeat(2, minmax(0,1fr)); grid-template-rows: auto; gap: 36px;}
+  .advantage-intro { grid-column: auto; grid-row: auto; min-height: auto; padding-bottom: 16px; }
+  .advantage-intro h2 { max-width: 520px; }
+  .tilt-card:nth-child(n) { grid-column: auto; grid-row: auto; }
+  .uk-layout { grid-template-columns: minmax(280px, 360px) minmax(0, 500px); gap: 56px; }
+  .uk-globe-target,
+  .uk-globe-target.reveal-card,
+  .uk-globe-target.reveal-card.is-visible { width: min(360px, 40vw); }
+}
+
+@media (max-width: 980px) {
+  .hero-bottom { display: grid; grid-template-columns: 1fr; gap: 34px; }
+.hero-points {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 24px;
+  row-gap: 14px;
+  padding-left: 0;
+  flex-basis: auto;
+}
+  .manifesto-inner { width: calc(100vw - 40px); }
+  .manifesto-text { font-size: clamp(30px, 6.2vw, 48px); }
+  .uk-layout { grid-template-columns: 1fr; text-align: center; }
+  .uk-globe-target,
+  .uk-globe-target.reveal-card,
+  .uk-globe-target.reveal-card.is-visible { width: min(420px, 70vw); margin-inline: auto; }
+  .uk-copy p:not(.eyebrow) { margin-inline: auto; }
+}
+
+@media (max-width: 760px) {
+  .language-menu { top: calc(100% + 4px); padding: 4px; gap: 4px; }
+  .manifesto { min-height: 860px; padding: 90px 0; }
+  .manifesto-inner { width: calc(100vw - 30px); }
+  .manifesto-text { font-size: clamp(27px, 7.8vw, 40px); line-height: 1.16; }
+  .story-media-processor { min-height: 0; aspect-ratio: 1122/900; }
+  .accordion-item { padding-inline: 20px; }
+  .accordion-panel > ul { padding-left: 30px; }
+  .accordion-trigger { padding-block: 22px; }
+  .advantage-layout { grid-template-columns: 1fr; gap: 24px; }
+  .advantage-intro { grid-column: auto; }
+  .tilt-card { min-height: 230px; padding: 24px; grid-template-columns: 60px minmax(0,1fr); row-gap: 22px; }
+  .card-icon, .card-icon img { width: 54px; height: 54px; }
+  .tilt-card h3 { font-size: 20px; }
+  .process-card { padding: 26px; }
+  .process-card > p:not(.step-label) { margin-top: auto; margin-bottom: 0; }
+  .uk-section { min-height: auto; padding: 76px 0 70px; }
+  .uk-layout { gap: 34px; text-align: left; }
+  .uk-globe-target,
+  .uk-globe-target.reveal-card,
+  .uk-globe-target.reveal-card.is-visible { width: min(340px, 88vw); }
+  .uk-copy p:not(.eyebrow) { margin-inline: 0; font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-square { opacity: .06 !important; }
+  .trace-path, .trace-dot, .uk-globe-target .uk-location-pin { animation: none !important; }
+  .manifesto-text span { opacity: 1 !important; transform: none !important; filter: none !important; color: var(--final-color) !important; }
+}

@@ -1,0 +1,101 @@
+/* Final v9: restore the Step #1 CTA and make the globe handoff a single seamless sequence. */
+
+/* The CTA is intentionally present only on the first process card. */
+.process-card .process-contact {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-height: 54px;
+  margin: 22px auto 16px;
+  padding: 0 30px;
+  border: 1px solid rgba(255, 209, 0, .34);
+  border-radius: 16px;
+  background: #101010;
+  color: var(--yellow);
+  font-family: var(--font-body, "Manrope", sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .22);
+  cursor: pointer;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.process-card .process-contact:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 209, 0, .78);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .28);
+}
+.process-card .process-contact:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+/* Hide the static UK globe until the travelling globe is actually settled. */
+.uk-globe-target,
+.uk-globe-target.reveal-card,
+.uk-globe-target.reveal-card.is-visible {
+  opacity: 0 !important;
+  transform: none !important;
+}
+.uk-globe-target.is-handoff-complete,
+.uk-globe-target.reveal-card.is-handoff-complete,
+.uk-globe-target.reveal-card.is-visible.is-handoff-complete {
+  opacity: var(--target-opacity, 0) !important;
+}
+
+/* The marker is the final event in the sequence: it pops in only after landing. */
+.uk-globe-target .uk-location-pin,
+.globe-handoff .handoff-location-pin {
+  opacity: var(--marker-opacity, 0) !important;
+  transform: translate(-50%, -100%) scale(calc(.72 + var(--marker-opacity, 0) * .28)) !important;
+  transform-origin: 50% 100%;
+  animation: none !important;
+  transition: opacity .18s ease, transform .28s cubic-bezier(.2,.9,.25,1.2);
+}
+
+/* Keep the two handoff images perfectly stacked while they cross-fade late. */
+.globe-handoff .handoff-globe-process,
+.globe-handoff .handoff-uk-layer,
+.globe-handoff .handoff-globe-uk-base {
+  transition: none !important;
+}
+.globe-handoff .handoff-uk-layer {
+  opacity: var(--uk-morph, 0);
+}
+.globe-handoff .handoff-globe-process {
+  opacity: calc(1 - var(--uk-morph, 0));
+}
+
+@media (max-width: 900px) {
+  .process-card .process-contact {
+    min-height: 48px;
+    margin-top: 14px;
+    margin-bottom: 12px;
+    padding-inline: 24px;
+    border-radius: 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .process-card .process-contact {
+    min-height: 42px;
+    margin: 6px auto 8px;
+    padding-inline: 20px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uk-globe-target,
+  .uk-globe-target.reveal-card,
+  .uk-globe-target.reveal-card.is-visible {
+    opacity: 1 !important;
+  }
+  .uk-globe-target .uk-location-pin {
+    opacity: 1 !important;
+    transform: translate(-50%, -100%) !important;
+  }
+}

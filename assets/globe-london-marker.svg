@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 738 738" fill="none">
+  <image href="globe-london-transparent.png" x="0" y="0" width="738" height="738"/>
+  <!-- London marker. Move this group if a manual fine adjustment is needed. -->
+  <g id="london-marker" transform="translate(318 126)">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M31.5 58.7c.08.05.14.08.18.1l.08.05c.61.33 1.36.33 1.97 0l.08-.05.18-.1c.16-.1.4-.24.7-.43.59-.37 1.43-.91 2.43-1.62 1.99-1.41 4.65-3.5 7.31-6.24 5.3-5.45 10.82-13.64 10.82-24.18C55.25 13.76 45.1 3.63 32.62 3.63S10 13.76 10 26.23c0 10.54 5.52 18.73 10.82 24.18 2.66 2.74 5.32 4.83 7.31 6.24 1 .71 1.84 1.25 2.43 1.62.3.19.54.33.7.43ZM32.62 34.4a8.18 8.18 0 1 0 0-16.35 8.18 8.18 0 0 0 0 16.35Z" fill="#FFD100"/>
+  </g>
+</svg>

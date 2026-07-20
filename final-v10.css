@@ -1,0 +1,178 @@
+/* Final v10: protect long process titles and keep one live globe through the full handoff. */
+
+/* Give long titles enough room and reserve a clean column for the supplied SVG. */
+@media (min-width: 1241px) {
+  .process-cards { width: min(540px, 37vw); height: 480px; }
+  .process-card { padding: 38px 104px 36px 40px; }
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    max-width: 100%;
+    font-size: clamp(30px, 2.25vw, 40px);
+    line-height: 1.12;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  html[lang="ru"] .process-card[data-step="3"] h2 {
+    font-size: clamp(27px, 1.9vw, 30px);
+    letter-spacing: -.045em;
+  }
+}
+.process-card h2 { position: relative; z-index: 3; text-wrap: balance; }
+.process-card-decor { z-index: 4; }
+
+/* The handoff is a copy of the live canvas, including the same front/back orbits. */
+.globe-handoff {
+  transform: none !important;
+  overflow: visible;
+  isolation: isolate;
+}
+.handoff-globe-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+}
+#handoff-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.handoff-sheen { z-index: 4; }
+.globe-handoff .orbit-back { z-index: 2; }
+.globe-handoff .orbit-front { z-index: 5; }
+.globe-handoff::before { display: none !important; }
+.handoff-globe,
+.handoff-uk-layer,
+.handoff-globe-uk-base,
+.globe-handoff .handoff-location-pin { display: none !important; }
+
+/* The final section only contributes the separate marker and side details.
+   Its duplicate globe image stays hidden so there is never a second sphere. */
+.uk-globe-target,
+.uk-globe-target.reveal-card,
+.uk-globe-target.reveal-card.is-visible,
+.uk-globe-target.is-handoff-complete {
+  opacity: 1 !important;
+  transform: none !important;
+}
+.uk-globe-base { opacity: 0 !important; }
+.uk-globe-target .uk-location-pin {
+  z-index: 8;
+  opacity: var(--marker-opacity, 0) !important;
+  transform: translate(-50%, -100%) scale(calc(.72 + var(--marker-opacity, 0) * .28)) !important;
+  transition: opacity .18s ease, transform .3s cubic-bezier(.2,.9,.25,1.2);
+}
+
+@media (max-width: 1240px) and (min-width: 901px) {
+  .process-cards { width: min(470px, 48vw); height: 440px; }
+  .process-card { padding: 30px 82px 30px 30px; }
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    font-size: clamp(26px, 3.25vw, 36px);
+    line-height: 1.12;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  html[lang="ru"] .process-card[data-step="3"] h2 { font-size: clamp(24px, 2.9vw, 31px); }
+}
+@media (max-width: 900px) and (min-width: 641px) {
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  html[lang="ru"] .process-card[data-step="3"] h2 { font-size: clamp(22px, 3.6vw, 28px); }
+}
+@media (max-width: 640px) {
+  .process-card h2,
+  html[lang="ru"] .process-card h2 {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  html[lang="ru"] .process-card[data-step="3"] h2 { font-size: clamp(20px, 6vw, 26px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .uk-globe-base { opacity: 1 !important; }
+  .globe-handoff { display: none !important; }
+  .uk-globe-target .uk-location-pin { opacity: 1 !important; transform: translate(-50%, -100%) !important; }
+}
+
+/* London coordinate on the final live projection (51.5074° N, 0.1278° W). */
+.uk-globe-target .uk-location-pin {
+  left: 43.2% !important;
+  top: 25.9% !important;
+  width: 9.2% !important;
+}
+
+/* Final London marker patch v11.
+   Coordinates are derived from the same globe projection used by script.js
+   for London: 51.5074 N, 0.1278 W. The marker is anchored by its bottom tip. */
+.uk-globe-visual {
+  position: relative;
+}
+.uk-globe-target .uk-location-pin {
+  left: 43.2669% !important;
+  top: 26.1856% !important;
+  width: clamp(30px, 8.8%, 46px) !important;
+  height: auto !important;
+  z-index: 20 !important;
+  pointer-events: none !important;
+  transform-origin: 50% 100% !important;
+  filter: drop-shadow(0 0 12px rgba(255, 209, 0, .58)) !important;
+}
+@media (max-width: 640px) {
+  .uk-globe-target .uk-location-pin {
+    width: clamp(27px, 10.5%, 40px) !important;
+  }
+}
+
+
+/* Final marker visibility patch v12.
+   The live handoff canvas remains above the static UK block, so the marker
+   must live in the same fixed handoff layer. This keeps it visible after
+   landing and lets it disappear naturally when the user scrolls back. */
+@media (prefers-reduced-motion: no-preference) {
+  .uk-globe-target .uk-location-pin {
+    display: none !important;
+  }
+
+  .globe-handoff .handoff-location-pin {
+    display: block !important;
+    position: absolute !important;
+    left: 43.2669% !important;
+    top: 26.1856% !important;
+    width: clamp(30px, 8.8%, 46px) !important;
+    height: auto !important;
+    z-index: 20 !important;
+    pointer-events: none !important;
+    opacity: var(--marker-opacity, 0) !important;
+    transform: translate(-50%, -100%) scale(calc(.72 + var(--marker-opacity, 0) * .28)) !important;
+    transform-origin: 50% 100% !important;
+    filter: drop-shadow(0 0 12px rgba(255, 209, 0, .62)) !important;
+    transition:
+      opacity .22s ease,
+      transform .34s cubic-bezier(.2, .9, .25, 1.2) !important;
+  }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: no-preference) {
+  .globe-handoff .handoff-location-pin {
+    width: clamp(27px, 10.5%, 40px) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uk-globe-target .uk-location-pin {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translate(-50%, -100%) scale(1) !important;
+  }
+}
